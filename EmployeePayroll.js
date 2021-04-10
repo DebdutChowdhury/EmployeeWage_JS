@@ -1,37 +1,35 @@
 console.log("Welcome to Employee wage program");
-const IS_PART_TIME = 1;
-const IS_FULL_TIME = 2;
-const PART_TIME_HOUR = 4;
-const FULL_TIME_HOUR = 8;
-const WAGE_PER_HOUR = 20;
+const WAGE_PER_HR = 20;
+const IS_FULL_TIME = 1;
+const IS_PART_TIME = 2;
+const TOTAL_MONTHLY_DAYS = 20;
 
-let empHr = 0;
-let empCheck = Math.floor(Math.random()*10) %3;
+let empHr;
+let monthlyWage = 0;
 
 class Employee{
     constructor(){};
     
     attenfance(){
-        switch(empCheck){
-            case IS_FULL_TIME : 
-                empHr = FULL_TIME_HOUR;
-                break;
-            case IS_PART_TIME : 
-                empHr = PART_TIME_HOUR;
-                break;
-            default:
-                empHr = 0;
+        for (let day = 0; day < TOTAL_MONTHLY_DAYS; day++){
+            let empCheck = Math.floor(Math.random()*3);
+            switch(empCheck){
+                case IS_FULL_TIME : 
+                    empHr = 8;
+                    break;
+                case IS_PART_TIME : 
+                    empHr = 4;
+                    break;
+                default:
+                    empHr = 0;
+                    break;
+            }
+            let daillyWage = empHr * WAGE_PER_HR;
+            monthlyWage = monthlyWage + daillyWage; 
         }
-        return empCheck;
-    }
-
-    checkDaillyWage(){
-        let empWage = empHr * WAGE_PER_HOUR;
-        return empWage;
+        return monthlyWage;
     }
 }
 
 let emp = new Employee().attenfance();
-let daillywage = new Employee().checkDaillyWage();
-console.log(emp);
-console.log(`Emp Wage: ${daillywage}`);
+console.log(`Montly Wage: ${emp}`);
