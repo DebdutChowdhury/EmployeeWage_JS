@@ -10,15 +10,9 @@ const NUM_OF_WORKING_DAYS = 20;
 const IS_PART_TIME = 1;
 
 let empHr = 0;
-let totalEmpHrs = 0;
-let totalWorkingDays = 0;
-let empDailyWAgeArr = new Array();
-let empDailyWAgeMap;
-let dailyCntr = 0;
 
 class Employee {
     constructor() { };  
-
 
     attendance(empCheck) {
         switch (empCheck) {
@@ -35,38 +29,29 @@ class Employee {
         return empCheck;
     }
 
-    caldaillyWage(empHr) {
+    daillyWage(empHr) {
         return empHr * WAGE_PER_HOUR;
     }
 
-    caldaillyHrs(daillyhr){
-        let totalEmpHrs = 0;
-        totalEmpHrs += daillyhr;
-        return totalEmpHrs;
-    }
-
-    mapDayWithWage(daillyWage){
-        dailyCntr++;
-        return dailyCntr + "=" + daillyWage;
-    }
-
     checkWage() {
+        let totalEmpHrs = 0;
+        let totalWorkingDays = 0;
+        let empDailyWAgeArr = new Array();
+        let empDailyWAgeMap = new Map();
         while (totalEmpHrs <= MAX_HR_IN_MONTH && totalWorkingDays < NUM_OF_WORKING_DAYS) {
             totalWorkingDays++;
             let empCheck = Math.floor(Math.random() * 10) % 3;
             empHr = this.attendance(empCheck);
             totalEmpHrs += empHr;
-            empDailyWAgeArr.push(this.caldaillyWage(empHr));
+            empDailyWAgeArr.push(this.daillyWage(totalEmpHrs));
+            empDailyWAgeMap.set(totalWorkingDays, this.daillyWage(empHr))
         }
 
-        let empWage = this.caldaillyWage(totalEmpHrs);
+        console.log(empDailyWAgeMap);
+        let empWage = this.daillyWage(totalEmpHrs);
         console.log("Total Days: " + totalWorkingDays +" Employee Hours: " + totalEmpHrs +" Emp Wage: "+ empWage);
-    
-        empDailyWAgeArr.forEach(this.caldaillyHrs);
-        console.log(`total working hours are: ${totalEmpHrs}`);
-
-        let empDailyWAgeMap = empDailyWAgeArr.map(this.mapDayWithWage);
-        console.log("Total emp wage " +empDailyWAgeMap);        
+        let totalWages = (totalWage,dailyWage) => totalWage + dailyWage;
+        console.log("Emp Wage with reduce " + Array.from(empDailyWAgeMap.values()).reduce(totalWages,0));    
     }
 }
 
