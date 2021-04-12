@@ -10,6 +10,11 @@ const NUM_OF_WORKING_DAYS = 20;
 const IS_PART_TIME = 1;
 
 let empHr = 0;
+let totalEmpHrs = 0;
+let totalWorkingDays = 0;
+let empDailyWAgeArr = new Array();
+let empDailyWAgeMap;
+let dailyCntr = 0;
 
 class Employee {
     constructor() { };  
@@ -19,32 +24,49 @@ class Employee {
         switch (empCheck) {
             case this.IS_PART_TIME:
                 empHr = this.PART_TIME_HOUR;
+                break;
             case this.IS_FULL_TIME:
                 empHr = this.FULL_TIME_HOUR;
+                break;
             default:
                 empHr = 0;
+                break;
         }
         return empCheck;
     }
 
-    daillyWage(empHr) {
+    caldaillyWage(empHr) {
         return empHr * WAGE_PER_HOUR;
     }
 
+    caldaillyHrs(daillyhr){
+        let totalEmpHrs = 0;
+        totalEmpHrs += daillyhr;
+        return totalEmpHrs;
+    }
 
+    mapDayWithWage(daillyWage){
+        dailyCntr++;
+        return dailyCntr + "=" + daillyWage;
+    }
 
     checkWage() {
-        let totalEmpHrs = 0;
-        let totalWorkingDays = 0;
-        let empDailyWAgeArr = new Array();
         while (totalEmpHrs <= MAX_HR_IN_MONTH && totalWorkingDays < NUM_OF_WORKING_DAYS) {
             totalWorkingDays++;
             let empCheck = Math.floor(Math.random() * 10) % 3;
-            totalEmpHrs += this.attendance(empCheck);
-            empDailyWAgeArr.push(this.daillyWage(totalEmpHrs));
+            empHr = this.attendance(empCheck);
+            totalEmpHrs += empHr;
+            empDailyWAgeArr.push(this.caldaillyWage(empHr));
         }
-        let empWage = new Employee().daillyWage(totalEmpHrs);
-        console.log("Total Days: " + totalWorkingDays + ", Employee Hours: " + totalEmpHrs + ", Emp Wage: " + empWage);
+
+        let empWage = this.caldaillyWage(totalEmpHrs);
+        console.log("Total Days: " + totalWorkingDays +" Employee Hours: " + totalEmpHrs +" Emp Wage: "+ empWage);
+    
+        empDailyWAgeArr.forEach(this.caldaillyHrs);
+        console.log(`total working hours are: ${totalEmpHrs}`);
+
+        let empDailyWAgeMap = empDailyWAgeArr.map(this.mapDayWithWage);
+        console.log("Total emp wage " +empDailyWAgeMap);        
     }
 }
 
